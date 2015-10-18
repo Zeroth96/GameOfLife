@@ -85,10 +85,10 @@ function drawCell(cellX, cellY){
 	var x = cellX*pixelSize;
 	var y = cellY*pixelSize;
 	var mid = pixelSize / 2;
-	var hasNorthSide = cellIsOnNorthSide(cellX, cellY);
-	var hasEastSide = cellIsOnEastSide(cellX, cellY);
-	var hasSouthSide = cellIsOnSouthSide(cellX, cellY);
-	var hasWestSide = cellIsOnWestSide(cellX, cellY);
+	var hasNorthSide = cellIsOnSide(cellX, cellY, 0);
+	var hasEastSide = cellIsOnSide(cellX, cellY, 2);
+	var hasSouthSide = cellIsOnSide(cellX, cellY, 4);
+	var hasWestSide = cellIsOnSide(cellX, cellY, 6);
 	ctx.moveTo(x, y);
 	drawCorner(x + mid, y, x + pixelSize, y, x + pixelSize, y + mid, !hasNorthSide && !hasEastSide); //north-east
 	drawCorner(x + pixelSize, y + mid, x + pixelSize, y + pixelSize, x + mid, y + pixelSize, !hasSouthSide && !hasEastSide); //south-east
@@ -104,22 +104,6 @@ function drawCorner(startX, startY, midX, midY, endX, endY, rounded){
 		ctx.lineTo(midX, midY);
 		ctx.lineTo(endX, endY);
 	}
-}
-
-function cellIsOnNorthSide(x, y){
-	return cellIsOnSide(x, y, 0);
-}
-
-function cellIsOnEastSide(x, y){
-	return cellIsOnSide(x, y, 2);
-}
-
-function cellIsOnSouthSide(x, y){
-	return cellIsOnSide(x, y, 4);
-}
-
-function cellIsOnWestSide(x, y){
-	return cellIsOnSide(x, y, 6);
 }
 
 function cellIsOnSide(x, y, side){
