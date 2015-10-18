@@ -124,10 +124,10 @@ function getNeighbourCount(posX, posY){
 }
 
 //adds a living cell at the cursor's position
-function addCellAtCursor(){
+function addCellAtCursor(event){
 	//cursor position
-	var x = event.pageX - canvas.offsetLeft;
-	var y = event.pageY - canvas.offsetTop;
+	var x = event.clientX - canvas.offsetLeft;
+	var y = event.clientY - canvas.offsetTop;
 	
 	//converted to coordinates
 	var coordX = Math.floor(x / pixelSize);
@@ -190,13 +190,13 @@ $(document).ready(function(){
 	cells = initCells();
 	
 	//pixel draw method
-	$(canvas).mousedown(function() {
+	$(canvas).mousedown(function(event) {
 		isDragging = true;
-		addCellAtCursor();
+		addCellAtCursor(event);
 	})
-	.mousemove(function() {
+	.mousemove(function(event) {
 		if (isDragging) {
-			addCellAtCursor();
+			addCellAtCursor(event);
 		}
 	})
 	.mouseup(function() {
