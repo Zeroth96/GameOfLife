@@ -12,7 +12,7 @@ var yOffsets = [-1,-1, 0,1,1, 1, 0,-1];
 
 //Do one game tick, then render the screen.
 function tick(){
-	if($("#tick").is(':checked')){
+	if(shouldTick()){
 		//make a copy of the cells to edit.
 		//the reason I dont just edit the one array is because conway's is meant to have all the cells ticked at the same time.
 		//rather than trying to do that, just making a copy of the array and changing each state based on the previous state keeps it all in sync
@@ -131,6 +131,10 @@ function addCellAtCursor(){
 	draw(cells);
 }
 
+function shouldTick(){
+	return $("#tick").is(':checked');
+}
+
 //initialization method
 $(document).ready(function(){
 	canvas = document.getElementById('game');
@@ -141,7 +145,7 @@ $(document).ready(function(){
 	
 	//pixel draw method
 	canvas.addEventListener('click', function() { 
-		if(!$("#tick").is(':checked')){//is the game ticking atm?
+		if(!shouldTick()){//is the game ticking atm?
 			addCellAtCursor();
 		}
 	}, false);
