@@ -182,9 +182,7 @@ $(document).ready(function(){
 	
 	//pixel draw method
 	canvas.addEventListener('click', function() { 
-		if(!shouldTick()){//is the game ticking atm?
-			addCellAtCursor();
-		}
+		addCellAtCursor();
 	}, false);
 	
 	addButtonListeners();
