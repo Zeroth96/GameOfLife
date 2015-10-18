@@ -1,0 +1,19 @@
+<html>
+<head>
+	<title>Conway's Game of Life</title>
+	<link rel="stylesheet" href="style.css">
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="gameoflife.js"></script>
+</head>
+
+<body>
+	<canvas id="game" width=1000 height=800></canvas><br>
+	<input type="checkbox" id="tick" value="Tick"/>Do Tick
+	<input type="button" id="clear" value="Clear"/><br>
+	<p id='about'>
+	Conway's Game of Life is a zero player game where you draw patterns and see how they change and evolve over time.<br>
+	This is a very simple implementation. Do Tick toggles if the game should run or not, and clear kills all the cells on the screen. You can only draw cells on the screen when Do Tick is disabled.<br>
+	It's worth checking out the Wikipedia page for Conway's Game of Life for more info, and some example patterns.
+	</p>
+<body>
+</html>
