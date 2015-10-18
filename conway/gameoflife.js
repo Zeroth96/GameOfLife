@@ -60,16 +60,21 @@ function tickCell(x, y){
 
 //Draws all the cells to the screen.
 function draw(cells){
+	ctx.fillStyle = bgColour;
+	ctx.fillRect(0, 0, width, height);
+	ctx.fillStyle = pixelColour;
+	ctx.beginPath();
+	
 	for(var x = 0; x < width / pixelSize; x++){
 		for(var y = 0; y < height / pixelSize; y++){
-			var style = bgColour; //dead style
 			if(cells[x][y]){
-				style = pixelColour; //alive style
+				drawCell(x, y);
 			}
-			ctx.fillStyle = style;
-			drawCell(x, y);
 		}
 	}
+	
+	ctx.closePath();
+	ctx.fill();
 	
 	if(shouldDrawGrid()){
 		drawGrid();
@@ -79,14 +84,11 @@ function draw(cells){
 function drawCell(cellX, cellY){
 	var x = cellX*pixelSize;
 	var y = cellY*pixelSize;
-	ctx.beginPath();
 	ctx.moveTo(x, y);
 	ctx.lineTo(x + pixelSize, y);
 	ctx.lineTo(x + pixelSize, y + pixelSize);
 	ctx.lineTo(x, y + pixelSize);
 	ctx.lineTo(x, y);
-	ctx.closePath();
-	ctx.fill();
 }
 
 function drawGrid(){
@@ -147,8 +149,10 @@ function addCellAtCursor(event){
 	var coordX = Math.floor(x / pixelSize);
 	var coordY = Math.floor(y / pixelSize);
 	
-	cells[coordX][coordY] = true;
-	draw(cells);
+	if(!cells[coordX][coordY]){
+		cells[coordX][coordY] = true;
+		draw(cells);
+	}
 }
 
 function shouldTick(){
