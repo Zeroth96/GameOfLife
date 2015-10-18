@@ -2,6 +2,7 @@ var gridColour = "#888888";
 var pixelColour = "#FFFFFF";
 var bgColour = "#000000";
 var pixelSize = 10;
+var tickDelay = 200;
 
 var canvas;
 var ctx;
@@ -192,5 +193,5 @@ $(document).ready(function(){
 	draw(cells);
 	
 	//repeatedly tick
-	setInterval(tick, 80);
+	setInterval(tick, tickDelay);
 });
