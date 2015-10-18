@@ -85,10 +85,10 @@ function drawCell(cellX, cellY){
 	var x = cellX*pixelSize;
 	var y = cellY*pixelSize;
 	var mid = pixelSize / 2;
-	var hasNorthSide = cellIsOnSide(cellX, cellY, 0);
-	var hasEastSide = cellIsOnSide(cellX, cellY, 2);
-	var hasSouthSide = cellIsOnSide(cellX, cellY, 4);
-	var hasWestSide = cellIsOnSide(cellX, cellY, 6);
+	var hasNorthSide = cellIsOnSide(cellX, cellY, 0) || !shouldDoRounding();
+	var hasEastSide = cellIsOnSide(cellX, cellY, 2) || !shouldDoRounding();
+	var hasSouthSide = cellIsOnSide(cellX, cellY, 4) || !shouldDoRounding();
+	var hasWestSide = cellIsOnSide(cellX, cellY, 6) || !shouldDoRounding();
 	ctx.moveTo(x, y);
 	drawCorner(x + mid, y, x + pixelSize, y, x + pixelSize, y + mid, !hasNorthSide && !hasEastSide); //north-east
 	drawCorner(x + pixelSize, y + mid, x + pixelSize, y + pixelSize, x + mid, y + pixelSize, !hasSouthSide && !hasEastSide); //south-east
@@ -189,12 +189,20 @@ function shouldDrawGrid(){
 	return $("#grid").is(':checked');
 }
 
+function shouldDoRounding(){
+	return $("#rounding").is(':checked');
+}
+
 function addRandomCells(amount){
 	for(var i = 0; i < amount; i++){
 		var x = Math.floor(Math.random() *  width / pixelSize);
 		var y = Math.floor(Math.random() *  height / pixelSize);
 		cells[x][y] = true;
 	}
+	draw(cells);
+}
+
+function redraw(){
 	draw(cells);
 }
 
@@ -211,10 +219,9 @@ function addButtonListeners(){
 		draw(cells);
 	});
 	
-	//when we toggle the grid checkbox..
-	$('#grid').click(function(){
-		draw(cells);
-	});
+	$('#grid').click(redraw);
+	
+	$('#rounding').click(redraw);
 	
 	//enter key is play/pause button
 	$(document).on('keydown', function(d){
