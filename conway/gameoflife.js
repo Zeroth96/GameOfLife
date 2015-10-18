@@ -67,13 +67,26 @@ function draw(cells){
 				style = pixelColour; //alive style
 			}
 			ctx.fillStyle = style;
-			ctx.fillRect(x*pixelSize, y*pixelSize, pixelSize, pixelSize);
+			drawCell(x, y);
 		}
 	}
 	
 	if(shouldDrawGrid()){
 		drawGrid();
 	}
+}
+
+function drawCell(cellX, cellY){
+	var x = cellX*pixelSize;
+	var y = cellY*pixelSize;
+	ctx.beginPath();
+	ctx.moveTo(x, y);
+	ctx.lineTo(x + pixelSize, y);
+	ctx.lineTo(x + pixelSize, y + pixelSize);
+	ctx.lineTo(x, y + pixelSize);
+	ctx.lineTo(x, y);
+	ctx.closePath();
+	ctx.fill();
 }
 
 function drawGrid(){
@@ -89,6 +102,7 @@ function drawGrid(){
 		ctx.moveTo(0, y * pixelSize);
 		ctx.lineTo(width, y * pixelSize);
 	}
+	ctx.closePath();
 	
 	ctx.strokeStyle = gridColour;
 	ctx.stroke();
