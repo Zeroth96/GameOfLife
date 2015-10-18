@@ -1,12 +1,17 @@
+var gridColour = "#888888";
+var pixelColour = "#FFFFFF";
+var bgColour = "#000000";
+var pixelSize = 10;
+
 var canvas;
 var ctx;
 var width;
 var height;
-var pixelSize = 10;
 var cells;
 var nextCells;
 
 //both of these are clockwise, starting from north.
+//used to make it possible to iterate through the moore neighbours
 var xOffsets = [ 0, 1, 1,1,0,-1,-1,-1];
 var yOffsets = [-1,-1, 0,1,1, 1, 0,-1];
 
@@ -55,9 +60,9 @@ function tickCell(x, y){
 function draw(cells){
 	for(var x = 0; x < width / pixelSize; x++){
 		for(var y = 0; y < height / pixelSize; y++){
-			var style = '#000000'; //dead style
+			var style = bgColour; //dead style
 			if(cells[x][y]){
-				style = '#ffffff'; //alive style
+				style = pixelColour; //alive style
 			}
 			ctx.fillStyle = style;
 			ctx.fillRect(x*pixelSize, y*pixelSize, pixelSize, pixelSize);
@@ -80,16 +85,12 @@ function drawGrid(){
 		ctx.lineTo(width, y * pixelSize);
 	}
 	
-	ctx.strokeStyle = '#888888';
+	ctx.strokeStyle = gridColour;
 	ctx.stroke();
 }
 
 //initializes the cells variable, with a default state of all cells dead
 function initCells(){
-	var canvas = document.getElementById('game');
-	var width = canvas.width;
-	var height = canvas.height;
-	var pixelSize = 10;
 	var cells = [[]];
 	for(var x = 0; x < width / pixelSize; x++){
 		cells[x] = [];
@@ -144,6 +145,20 @@ function addRandomCells(amount){
 	draw(cells);
 }
 
+function addButtonListeners(){
+	//when we click the clear button..
+	$('#clear').click(function(){
+		cells = initCells(); //reinit (clear)
+		draw(cells);
+	});
+	
+	//when we click the random fill button..
+	$('#random').click(function(){
+		addRandomCells(((width / pixelSize) * (height / pixelSize)) / 10);//add 10% of the total number of cells as random cells
+		draw(cells);
+	});
+}
+
 //initialization method
 $(document).ready(function(){
 	canvas = document.getElementById('game');
@@ -158,18 +173,6 @@ $(document).ready(function(){
 			addCellAtCursor();
 		}
 	}, false);
-	
-	//when we click the clear button..
-	$('#clear').click(function(){
-		cells = initCells(); //reinit (clear)
-		draw(cells);
-	});
-	
-	//when we click the clear button..
-	$('#random').click(function(){
-		addRandomCells(((width / pixelSize) * (height / pixelSize)) / 10);//add 10% of the total number of cells as random cells
-		draw(cells);
-	});
 	
 	//do our first draw cycle so the game isn't blank
 	draw(cells);
