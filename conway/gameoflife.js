@@ -174,6 +174,8 @@ $(document).ready(function(){
 		}
 	}, false);
 	
+	addButtonListeners();
+	
 	//do our first draw cycle so the game isn't blank
 	draw(cells);
 	
