@@ -205,10 +205,12 @@ $(document).ready(function(){
 	
 	//pixel draw method
 	$(canvas).mousedown(function(event) {
+		event.preventDefault();
 		isDragging = true;
 		addCellAtCursor(event);
 	})
 	.mousemove(function(event) {
+		event.preventDefault();
 		if (isDragging) {
 			addCellAtCursor(event);
 		}
