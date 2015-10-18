@@ -68,7 +68,10 @@ function draw(cells){
 			ctx.fillRect(x*pixelSize, y*pixelSize, pixelSize, pixelSize);
 		}
 	}
-	drawGrid();
+	
+	if(shouldDrawGrid()){
+		drawGrid();
+	}
 }
 
 function drawGrid(){
@@ -136,6 +139,10 @@ function shouldTick(){
 	return $("#tick").is(':checked');
 }
 
+function shouldDrawGrid(){
+	return $("#grid").is(':checked');
+}
+
 function addRandomCells(amount){
 	for(var i = 0; i < amount; i++){
 		var x = Math.floor(Math.random() *  width / pixelSize);
@@ -155,6 +162,11 @@ function addButtonListeners(){
 	//when we click the random fill button..
 	$('#random').click(function(){
 		addRandomCells(((width / pixelSize) * (height / pixelSize)) / 10);//add 10% of the total number of cells as random cells
+		draw(cells);
+	});
+	
+	//when we toggle the grid checkbox..
+	$('#grid').click(function(){
 		draw(cells);
 	});
 }
