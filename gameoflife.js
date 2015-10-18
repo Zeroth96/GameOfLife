@@ -135,6 +135,15 @@ function shouldTick(){
 	return $("#tick").is(':checked');
 }
 
+function addRandomCells(amount){
+	for(var i = 0; i < amount; i++){
+		var x = Math.floor(Math.random() *  width / pixelSize);
+		var y = Math.floor(Math.random() *  height / pixelSize);
+		cells[x][y] = true;
+	}
+	draw(cells);
+}
+
 //initialization method
 $(document).ready(function(){
 	canvas = document.getElementById('game');
@@ -153,6 +162,12 @@ $(document).ready(function(){
 	//when we click the clear button..
 	$('#clear').click(function(){
 		cells = initCells(); //reinit (clear)
+		draw(cells);
+	});
+	
+	//when we click the clear button..
+	$('#random').click(function(){
+		addRandomCells(((width / pixelSize) * (height / pixelSize)) / 10);//add 10% of the total number of cells as random cells
 		draw(cells);
 	});
 	
