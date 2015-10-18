@@ -9,6 +9,7 @@ var ctx;
 var width;
 var height;
 var cells;
+var isDragging;
 var nextCells;
 
 //both of these are clockwise, starting from north.
@@ -170,6 +171,14 @@ function addButtonListeners(){
 	$('#grid').click(function(){
 		draw(cells);
 	});
+	
+	//enter key is play/pause button
+	$(document).on('keydown', function(d){
+		if (d.keyCode == 13) {
+			var state = $("#tick").is(':checked');
+			$("#tick").prop('checked', !state);
+		}
+	})
 }
 
 //initialization method
@@ -181,9 +190,18 @@ $(document).ready(function(){
 	cells = initCells();
 	
 	//pixel draw method
-	canvas.addEventListener('click', function() { 
+	$(canvas).mousedown(function() {
+		isDragging = true;
 		addCellAtCursor();
-	}, false);
+	})
+	.mousemove(function() {
+		if (isDragging) {
+			addCellAtCursor();
+		}
+	})
+	.mouseup(function() {
+		isDragging = false;
+	});
 	
 	addButtonListeners();
 	
