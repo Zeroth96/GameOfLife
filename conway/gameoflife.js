@@ -84,11 +84,53 @@ function draw(cells){
 function drawCell(cellX, cellY){
 	var x = cellX*pixelSize;
 	var y = cellY*pixelSize;
+	var mid = pixelSize / 2;
+	var hasNorthSide = cellIsOnNorthSide(cellX, cellY);
+	var hasEastSide = cellIsOnEastSide(cellX, cellY);
+	var hasSouthSide = cellIsOnSouthSide(cellX, cellY);
+	var hasWestSide = cellIsOnWestSide(cellX, cellY);
 	ctx.moveTo(x, y);
-	ctx.lineTo(x + pixelSize, y);
-	ctx.lineTo(x + pixelSize, y + pixelSize);
-	ctx.lineTo(x, y + pixelSize);
-	ctx.lineTo(x, y);
+	drawCorner(x + mid, y, x + pixelSize, y, x + pixelSize, y + mid, !hasNorthSide && !hasEastSide); //north-east
+	drawCorner(x + pixelSize, y + mid, x + pixelSize, y + pixelSize, x + mid, y + pixelSize, !hasSouthSide && !hasEastSide); //south-east
+	drawCorner(x + mid, y + pixelSize, x, y + pixelSize, x, y + mid, !hasSouthSide && !hasWestSide); //south-west
+	drawCorner(x, y + mid, x, y, x + mid, y, !hasNorthSide && !hasWestSide); //north-west
+}
+
+function drawCorner(startX, startY, midX, midY, endX, endY, rounded){
+	ctx.lineTo(startX, startY);
+	if(rounded){
+		ctx.quadraticCurveTo(midX, midY, endX, endY);
+	}else{
+		ctx.lineTo(midX, midY);
+		ctx.lineTo(endX, endY);
+	}
+}
+
+function cellIsOnNorthSide(x, y){
+	return cellIsOnSide(x, y, 0);
+}
+
+function cellIsOnEastSide(x, y){
+	return cellIsOnSide(x, y, 2);
+}
+
+function cellIsOnSouthSide(x, y){
+	return cellIsOnSide(x, y, 4);
+}
+
+function cellIsOnWestSide(x, y){
+	return cellIsOnSide(x, y, 6);
+}
+
+function cellIsOnSide(x, y, side){
+	offsetX = xOffsets[side];
+	offsetY = yOffsets[side];
+	x = x + offsetX;
+	y = y + offsetY;
+	if(x < 0 || x > cells.length || y < 0 || y > cells[0].length){
+		return true;
+	}
+	return cells[x][y];
 }
 
 function drawGrid(){
