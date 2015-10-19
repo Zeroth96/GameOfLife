@@ -9,8 +9,8 @@ var ctx;
 var width;
 var height;
 var cells;
-var isDragging;
 var nextCells;
+var isDragging;
 
 //both of these are clockwise, starting from north.
 //used to make it possible to iterate through the moore neighbours
@@ -37,7 +37,7 @@ function tick(){
 		cells = nextCells.map(function(arr) {
 			return arr.slice();
 		});
-		draw(cells);
+		draw();
 	}
 }
 
@@ -58,8 +58,37 @@ function tickCell(x, y){
 	}
 }
 
+//returns the amount of moore neighbours
+function getNeighbourCount(posX, posY){
+	var count = 0;
+	for(var dir = 0; dir < 8; dir++){
+		refX = posX + xOffsets[dir];
+		refY = posY + yOffsets[dir];
+		if(refX >= 0 && refX < cells.length){
+			if(refY >= 0 && refY < cells[0].length){
+				if(cells[refX][refY]){
+					count = count + 1;
+				}
+			}
+		}
+	}
+	return count;
+}
+
+//returns true if cell is on that director, starting from 0 (north), then rotating clockwise to 7 (north-west)
+function cellIsOnSide(x, y, dir){
+	var offsetX = xOffsets[dir];
+	var offsetY = yOffsets[dir];
+	posX = x + offsetX;
+	posY = y + offsetY;
+	if(posX < 0 || posX >= cells.length || posY < 0 || posY >= cells[0].length){
+		return true;
+	}
+	return cells[posX][posY];
+}
+
 //Draws all the cells to the screen.
-function draw(cells){
+function draw(){
 	ctx.fillStyle = bgColour;
 	ctx.fillRect(0, 0, width, height);
 	ctx.fillStyle = pixelColour;
@@ -106,17 +135,6 @@ function drawCorner(startX, startY, midX, midY, endX, endY, rounded){
 	}
 }
 
-function cellIsOnSide(x, y, side){
-	offsetX = xOffsets[side];
-	offsetY = yOffsets[side];
-	x = x + offsetX;
-	y = y + offsetY;
-	if(x < 0 || x > cells.length || y < 0 || y > cells[0].length){
-		return true;
-	}
-	return cells[x][y];
-}
-
 function drawGrid(){
 	ctx.beginPath();
 	//columns
@@ -148,23 +166,6 @@ function initCells(){
 	return cells;
 }
 
-//returns the amount of moore neighbours
-function getNeighbourCount(posX, posY){
-	var count = 0;
-	for(var dir = 0; dir < 8; dir++){
-		refX = posX + xOffsets[dir];
-		refY = posY + yOffsets[dir];
-		if(refX >= 0 && refX < cells.length){
-			if(refY >= 0 && refY < cells[0].length){
-				if(cells[refX][refY]){
-					count = count + 1;
-				}
-			}
-		}
-	}
-	return count;
-}
-
 //adds a living cell at the cursor's position
 function addCellAtCursor(event){
 	//cursor position
@@ -177,7 +178,7 @@ function addCellAtCursor(event){
 	
 	if(!cells[coordX][coordY]){
 		cells[coordX][coordY] = true;
-		draw(cells);
+		draw();
 	}
 }
 
@@ -199,29 +200,25 @@ function addRandomCells(amount){
 		var y = Math.floor(Math.random() *  height / pixelSize);
 		cells[x][y] = true;
 	}
-	draw(cells);
-}
-
-function redraw(){
-	draw(cells);
+	draw();
 }
 
 function addButtonListeners(){
 	//when we click the clear button..
 	$('#clear').click(function(){
 		cells = initCells(); //reinit (clear)
-		draw(cells);
+		draw();
 	});
 	
 	//when we click the random fill button..
 	$('#random').click(function(){
 		addRandomCells(((width / pixelSize) * (height / pixelSize)) / 10);//add 10% of the total number of cells as random cells
-		draw(cells);
+		draw();
 	});
 	
-	$('#grid').click(redraw);
+	$('#grid').click(draw);
 	
-	$('#rounding').click(redraw);
+	$('#rounding').click(draw);
 	
 	//enter key is play/pause button
 	$(document).on('keydown', function(d){
@@ -259,7 +256,7 @@ $(document).ready(function(){
 	addButtonListeners();
 	
 	//do our first draw cycle so the game isn't blank
-	draw(cells);
+	draw();
 	
 	//repeatedly tick
 	setInterval(tick, tickDelay);
